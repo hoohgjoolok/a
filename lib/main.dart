@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:telephony/telephony.dart';
+import 'package:sms_advanced/sms_advanced.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,15 +23,13 @@ class PermissionScreen extends StatefulWidget {
 }
 
 class _PermissionScreenState extends State<PermissionScreen> {
-  final Telephony telephony = Telephony.instance;
   bool _permissionsGranted = false;
 
   Future<void> _requestPermissions() async {
     var storage = await Permission.storage.request();
     var sms = await Permission.sms.request();
-    final bool? telephonyGranted = await telephony.requestPhoneAndSmsPermissions;
 
-    if (storage.isGranted && sms.isGranted && (telephonyGranted ?? false)) {
+    if (storage.isGranted && sms.isGranted) {
       setState(() {
         _permissionsGranted = true;
       });
@@ -39,10 +37,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
   }
 
   void _sendSMS() {
-    telephony.sendSms(
-      to: "1234567890",
-      message: "تم الإرسال من تطبيق Flutter باستخدام مكتبة telephony!",
-    );
+    SmsSender sender = SmsSender();
+    sender.sendSms(SmsMessage("1234567890", "رسالة SMS من مكتبة sms_advanced"));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("تم إرسال الرسالة")));
   }
 
