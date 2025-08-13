@@ -27,20 +27,23 @@ class _PermissionScreenState extends State<PermissionScreen> {
   bool _permissionsGranted = false;
 
   Future<void> _requestPermissions() async {
-    var statusStorage = await Permission.storage.request();
-    var statusSms = await Permission.sms.request();
+    var storage = await Permission.storage.request();
+    var sms = await Permission.sms.request();
+    final bool? telephonyGranted = await telephony.requestPhoneAndSmsPermissions;
 
-    final bool? smsPermissionsGranted = await telephony.requestPhoneAndSmsPermissions;
-
-    if (statusStorage.isGranted && statusSms.isGranted && (smsPermissionsGranted ?? false)) {
+    if (storage.isGranted && sms.isGranted && (telephonyGranted ?? false)) {
       setState(() {
         _permissionsGranted = true;
       });
-    } else {
-      setState(() {
-        _permissionsGranted = false;
-      });
     }
+  }
+
+  void _sendSMS() {
+    telephony.sendSms(
+      to: "1234567890",
+      message: "تم الإرسال من تطبيق Flutter باستخدام مكتبة telephony!",
+    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("تم إرسال الرسالة")));
   }
 
   @override
@@ -52,21 +55,29 @@ class _PermissionScreenState extends State<PermissionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('طلب الأذونات'),
-      ),
+      appBar: AppBar(title: Text("طلب الأذونات")),
       body: Center(
         child: _permissionsGranted
-            ? ElevatedButton(
-                child: Text('دخول'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WelcomeScreen()),
-                  );
-                },
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    child: Text("دخول"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _sendSMS,
+                    child: Text("إرسال رسالة SMS"),
+                  )
+                ],
               )
-            : Text('جاري طلب الأذونات...'),
+            : Text("جاري طلب الأذونات..."),
       ),
     );
   }
@@ -76,12 +87,8 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('مرحبا'),
-      ),
-      body: Center(
-        child: Text('مرحباً بك في التطبيق'),
-      ),
+      appBar: AppBar(title: Text("مرحبا")),
+      body: Center(child: Text("مرحباً بك في التطبيق")),
     );
   }
 }
