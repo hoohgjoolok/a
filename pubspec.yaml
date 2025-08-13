@@ -1,6 +1,6 @@
 
-name: flutter_apk_project
-description: A Flutter project using telephony and permissions
+name: flutter_sms_clean_project
+description: Flutter app with SMS and permissions
 publish_to: 'none'
 version: 1.0.0+1
 
