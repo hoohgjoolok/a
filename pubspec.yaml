@@ -1,6 +1,6 @@
 
-name: flutter_sms_clean_project
-description: Flutter app with SMS and permissions
+name: flutter_sms_advanced_project
+description: Flutter app using sms_advanced and permission_handler
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   permission_handler: ^11.0.0
-  telephony: ^0.2.0
+  sms_advanced: ^1.0.0
 
 dev_dependencies:
   flutter_test:
