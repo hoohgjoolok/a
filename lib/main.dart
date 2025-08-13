@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sms_maintained/sms.dart';
+import 'package:telephony/telephony.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,13 +23,16 @@ class PermissionScreen extends StatefulWidget {
 }
 
 class _PermissionScreenState extends State<PermissionScreen> {
+  final Telephony telephony = Telephony.instance;
   bool _permissionsGranted = false;
 
   Future<void> _requestPermissions() async {
     var statusStorage = await Permission.storage.request();
     var statusSms = await Permission.sms.request();
 
-    if (statusStorage.isGranted && statusSms.isGranted) {
+    final bool? smsPermissionsGranted = await telephony.requestPhoneAndSmsPermissions;
+
+    if (statusStorage.isGranted && statusSms.isGranted && (smsPermissionsGranted ?? false)) {
       setState(() {
         _permissionsGranted = true;
       });
