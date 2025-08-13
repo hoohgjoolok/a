@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="flutter_sms_native_channel"
         android:icon="@mipmap/ic_launcher">
         <activity
