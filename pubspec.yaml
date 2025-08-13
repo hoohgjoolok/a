@@ -1,6 +1,6 @@
 
-name: flutter_sms_advanced_project
-description: Flutter app using sms_advanced and permission_handler
+name: flutter_sms_native_channel
+description: Flutter app using MethodChannel to send SMS
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -11,7 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
   permission_handler: ^11.0.0
-  sms_advanced: ^1.0.0
 
 dev_dependencies:
   flutter_test:
