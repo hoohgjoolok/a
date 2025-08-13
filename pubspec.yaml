@@ -1,6 +1,6 @@
 
 name: flutter_apk_project
-description: A Flutter project to request permissions and show a welcome screen.
+description: A Flutter project using telephony and permissions
 publish_to: 'none'
 version: 1.0.0+1
 
