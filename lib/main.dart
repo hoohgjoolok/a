@@ -11,58 +11,57 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PermissionScreen(),
+      home: SMSHomePage(),
     );
   }
 }
 
-class PermissionScreen extends StatefulWidget {
+class SMSHomePage extends StatefulWidget {
   @override
-  _PermissionScreenState createState() => _PermissionScreenState();
+  _SMSHomePageState createState() => _SMSHomePageState();
 }
 
-class _PermissionScreenState extends State<PermissionScreen> {
+class _SMSHomePageState extends State<SMSHomePage> {
   static const platform = MethodChannel('sms_channel');
-
   bool _granted = false;
 
   @override
   void initState() {
     super.initState();
-    _requestPermissions();
+    _askPermissions();
   }
 
-  Future<void> _requestPermissions() async {
-    var status = await Permission.sms.request();
+  Future<void> _askPermissions() async {
+    var sms = await Permission.sms.request();
     var storage = await Permission.storage.request();
-    if (status.isGranted && storage.isGranted) {
+    if (sms.isGranted && storage.isGranted) {
       setState(() => _granted = true);
     }
   }
 
-  Future<void> _sendSms() async {
+  Future<void> _sendSMS() async {
     try {
       final result = await platform.invokeMethod('sendSms', {
-        "number": "1234567890",
-        "message": "تم إرسال رسالة SMS من Android Java عبر Flutter"
+        'number': '1234567890',
+        'message': 'تم إرسال رسالة SMS من Flutter عبر كود Java'
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("فشل الإرسال: \$e")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('خطأ: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("إرسال SMS")),
+      appBar: AppBar(title: Text('إرسال SMS')),
       body: Center(
         child: _granted
             ? ElevatedButton(
-                onPressed: _sendSms,
-                child: Text("إرسال رسالة"),
+                onPressed: _sendSMS,
+                child: Text('إرسال رسالة'),
               )
-            : Text("جاري طلب الأذونات..."),
+            : Text('بانتظار منح الأذونات...'),
       ),
     );
   }
